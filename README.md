@@ -36,56 +36,38 @@ ClientOS is a private, full-stack CRM built for freelancers and small agencies t
 
 ## 📁 Project Structure
 crm-app/
-├── public/
 ├── src/
 │   ├── lib/
-│   │   └── supabase.js          — Supabase client initialization
+│   │   └── supabase.js
 │   ├── hooks/
-│   │   └── useClients.js        — Data fetching, CRUD operations
+│   │   └── useClients.js
 │   ├── components/
-│   │   ├── AuthGuard.jsx        — Route protection + session management
-│   │   ├── Sidebar.jsx          — Navigation sidebar with role badge
-│   │   ├── StatsBar.jsx         — Outstanding balance + stats cards
-│   │   ├── FilterBar.jsx        — Search, filter, sort, export, add client
-│   │   ├── ClientTable.jsx      — Admin client table with actions
-│   │   ├── ClientModal.jsx      — Add / edit client form modal
-│   │   ├── StaffClientTable.jsx — Staff view cards (name + requirements)
-│   │   └── StatusBadge.jsx      — Pending / Paid / Overdue badge
+│   │   ├── AuthGuard.jsx
+│   │   ├── Sidebar.jsx
+│   │   ├── StatsBar.jsx
+│   │   ├── FilterBar.jsx
+│   │   ├── ClientTable.jsx
+│   │   ├── ClientModal.jsx
+│   │   ├── StaffClientTable.jsx
+│   │   └── StatusBadge.jsx
 │   ├── pages/
-│   │   ├── LoginPage.jsx        — Role selector + login form
-│   │   └── DashboardPage.jsx    — Main dashboard (Admin + Staff views)
-│   ├── App.jsx                  — Root component
-│   ├── main.jsx                 — React entry point
-│   └── index.css                — Tailwind CSS 4.0 theme variables
-├── .env.local                   — Supabase credentials (not committed)
-├── vite.config.js               — Vite + Tailwind plugin config
+│   │   ├── LoginPage.jsx
+│   │   └── DashboardPage.jsx
+│   ├── App.jsx
+│   ├── main.jsx
+│   └── index.css
+├── .env.local
+├── vite.config.js
 └── package.json
+
 ## 🗄 Database Schema
 
 ### profiles
 | Column | Type | Description |
 |--------|------|-------------|
 | id | uuid | References auth.users |
-| role | text | admin or staff |
+| role | text | admin or staff 
 | full_name | text | Optional display name |
-
-### clients
-| Column | Type | Description |
-|--------|------|-------------|
-| id | uuid | Primary key |
-| user_id | uuid | Admin who created the client |
-| name | text | Client full name |
-| email | text | Contact email |
-| phone | text | Contact phone |
-| company | text | Company or brand name |
-| type | text | monthly or onetime |
-| monthly_rate | numeric | For monthly clients |
-| billing_cycle_start | date | For monthly clients |
-| project_value | numeric | For one-time clients |
-| project_deadline | date | For one-time clients |
-| payment_status | text | pending, paid, or overdue |
-| notes | text | Requirements visible to staff |
-| created_at | timestamptz | Auto-generated |
 
 ## 🔒 Security
 - All routes protected behind AuthGuard
