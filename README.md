@@ -34,31 +34,6 @@ ClientOS is a private, full-stack CRM built for freelancers and small agencies t
 - See client name, company, and project requirements only
 - Simple search to find clients quickly
 
-## 📁 Project Structure
-crm-app/
-├── src/
-│   ├── lib/
-│   │   └── supabase.js
-│   ├── hooks/
-│   │   └── useClients.js
-│   ├── components/
-│   │   ├── AuthGuard.jsx
-│   │   ├── Sidebar.jsx
-│   │   ├── StatsBar.jsx
-│   │   ├── FilterBar.jsx
-│   │   ├── ClientTable.jsx
-│   │   ├── ClientModal.jsx
-│   │   ├── StaffClientTable.jsx
-│   │   └── StatusBadge.jsx
-│   ├── pages/
-│   │   ├── LoginPage.jsx
-│   │   └── DashboardPage.jsx
-│   ├── App.jsx
-│   ├── main.jsx
-│   └── index.css
-├── .env.local
-├── vite.config.js
-└── package.json
 
 ## 🗄 Database Schema
 
