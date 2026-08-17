@@ -14,22 +14,50 @@ export default function StatsBar({ clients }) {
   const overdue = clients.filter(c => c.payment_status === 'overdue').length
 
   const stats = [
-    { label: 'Outstanding Balance', value: `₹${outstanding.toLocaleString()}`, icon: DollarSign, color: 'text-rose-500 bg-rose-50' },
-    { label: 'Total Clients',       value: clients.length,  icon: Users,         color: 'text-indigo-500 bg-indigo-50' },
-    { label: 'Paid',                value: paid,            icon: CheckCircle,   color: 'text-emerald-500 bg-emerald-50' },
-    { label: 'Pending / Overdue',   value: `${pending} / ${overdue}`, icon: AlertCircle, color: 'text-amber-500 bg-amber-50' },
+    {
+      label: 'Outstanding',
+      value: `₹${outstanding.toLocaleString()}`,
+      icon: DollarSign,
+      iconBg: 'var(--th-danger-bg)',
+      iconColor: 'var(--color-danger)',
+    },
+    {
+      label: 'Total Clients',
+      value: clients.length,
+      icon: Users,
+      iconBg: 'var(--th-primary-light)',
+      iconColor: 'var(--color-primary)',
+    },
+    {
+      label: 'Paid',
+      value: paid,
+      icon: CheckCircle,
+      iconBg: 'var(--th-success-bg)',
+      iconColor: 'var(--color-success)',
+    },
+    {
+      label: 'Pending / Overdue',
+      value: `${pending} / ${overdue}`,
+      icon: AlertCircle,
+      iconBg: 'var(--th-warning-bg)',
+      iconColor: 'var(--color-warning)',
+    },
   ]
 
   return (
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-      {stats.map(s => (
-        <div key={s.label} className="bg-white rounded-2xl border border-[--color-border] p-5 shadow-sm flex items-center gap-4">
-          <div className={`p-2.5 rounded-xl ${s.color.split(' ')[1]}`}>
-            <s.icon className={`w-5 h-5 ${s.color.split(' ')[0]}`} />
+      {stats.map((s, i) => (
+        <div
+          key={s.label}
+          className="glass-card rounded-2xl p-5 flex items-center gap-4 animate-fade-in"
+          style={{ animationDelay: `${i * 0.08}s` }}
+        >
+          <div className="p-3 rounded-xl" style={{ background: s.iconBg }}>
+            <s.icon className="w-5 h-5" style={{ color: s.iconColor }} />
           </div>
           <div>
-            <div className="text-xl font-bold font-[--font-display] text-[--color-text]">{s.value}</div>
-            <div className="text-xs text-[--color-muted]">{s.label}</div>
+            <div className="text-xl font-bold font-[--font-display]" style={{ color: 'var(--th-text)' }}>{s.value}</div>
+            <div className="text-xs" style={{ color: 'var(--th-muted)' }}>{s.label}</div>
           </div>
         </div>
       ))}

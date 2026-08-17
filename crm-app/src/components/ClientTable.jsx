@@ -11,83 +11,110 @@ export default function ClientTable({ clients, onEdit, onDelete, onMarkPaid }) {
 
   if (clients.length === 0)
     return (
-      <div className="text-center py-20 text-slate-400 text-sm bg-white rounded-2xl border border-slate-200">
-        No clients yet. Click <strong>Add New Client</strong> to get started.
+      <div className="glass-card rounded-2xl text-center py-20 animate-fade-in">
+        <p className="text-sm" style={{ color: 'var(--th-muted)' }}>
+          No clients yet. Click <strong style={{ color: 'var(--color-primary)' }}>Add New Client</strong> to get started.
+        </p>
       </div>
     )
 
   return (
-    <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b border-slate-200 bg-slate-50 text-slate-400 text-xs uppercase tracking-wide">
-            <th className="text-left px-5 py-3">Client</th>
-            <th className="text-left px-5 py-3">Type</th>
-            <th className="text-left px-5 py-3">Value</th>
-            <th className="text-left px-5 py-3">Deadline / Cycle</th>
-            <th className="text-left px-5 py-3">Status</th>
-            <th className="text-left px-5 py-3">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clients.map(c => (
-            <tr key={c.id} className="border-b border-slate-100 last:border-0 hover:bg-slate-50 transition-colors">
-              <td className="px-5 py-4">
-                <div className="font-semibold text-slate-800">{c.name}</div>
-                <div className="text-slate-400 text-xs">{c.email}</div>
-                {c.company && <div className="text-slate-400 text-xs">{c.company}</div>}
-              </td>
-              <td className="px-5 py-4">
-                <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                  c.type === 'monthly' ? 'bg-indigo-50 text-indigo-600' : 'bg-violet-50 text-violet-600'
-                }`}>
-                  {c.type === 'monthly' ? '📅 Monthly' : '💼 One-Time'}
-                </span>
-              </td>
-              <td className="px-5 py-4 font-semibold text-slate-700">
-                {c.type === 'monthly'
-                  ? `₹${(c.monthly_rate || 0).toLocaleString()}/mo`
-                  : `₹${(c.project_value || 0).toLocaleString()}`}
-              </td>
-              <td className="px-5 py-4 text-slate-400 text-xs">
-                {c.type === 'monthly'
-                  ? c.billing_cycle_start ? `Cycle: ${format(new Date(c.billing_cycle_start), 'MMM d')}` : '—'
-                  : c.project_deadline ? format(new Date(c.project_deadline), 'MMM d, yyyy') : '—'}
-              </td>
-              <td className="px-5 py-4">
-                <StatusBadge status={c.payment_status} />
-              </td>
-              <td className="px-5 py-4">
-                <div className="flex items-center gap-1">
-                  {c.type === 'monthly' && c.payment_status !== 'paid' && (
-                    <button
-                      onClick={() => onMarkPaid(c)}
-                      title="Mark as Paid"
-                      className="p-2 rounded-lg hover:bg-emerald-50 text-emerald-500 transition-colors"
-                    >
-                      <CheckCircle className="w-4 h-4" />
-                    </button>
-                  )}
-                  <button
-                    onClick={() => onEdit(c)}
-                    title="Edit"
-                    className="p-2 rounded-lg hover:bg-indigo-50 text-indigo-500 transition-colors"
-                  >
-                    <Pencil className="w-4 h-4" />
-                  </button>
-                  <button
-                    onClick={() => handleDelete(c)}
-                    title="Delete"
-                    className="p-2 rounded-lg hover:bg-rose-50 text-rose-400 transition-colors"
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </button>
-                </div>
-              </td>
+    <div className="glass-card rounded-2xl overflow-hidden animate-fade-in" style={{ animationDelay: '0.3s' }}>
+      <div className="overflow-x-auto">
+        <table className="w-full text-sm">
+          <thead>
+            <tr style={{ background: 'var(--th-table-header)', borderBottom: '1px solid var(--th-border)' }}>
+              <th className="text-left px-5 py-3.5 text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--th-muted)' }}>Client</th>
+              <th className="text-left px-5 py-3.5 text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--th-muted)' }}>Type</th>
+              <th className="text-left px-5 py-3.5 text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--th-muted)' }}>Value</th>
+              <th className="text-left px-5 py-3.5 text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--th-muted)' }}>Deadline / Cycle</th>
+              <th className="text-left px-5 py-3.5 text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--th-muted)' }}>Status</th>
+              <th className="text-left px-5 py-3.5 text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--th-muted)' }}>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {clients.map((c, i) => (
+              <tr
+                key={c.id}
+                className="animate-fade-in transition-colors duration-200"
+                style={{
+                  animationDelay: `${0.35 + i * 0.04}s`,
+                  borderBottom: '1px solid var(--th-border)',
+                }}
+                onMouseEnter={e => e.currentTarget.style.background = 'var(--th-table-row-hover)'}
+                onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+              >
+                <td className="px-5 py-4">
+                  <div className="font-semibold" style={{ color: 'var(--th-text)' }}>{c.name}</div>
+                  <div className="text-xs" style={{ color: 'var(--th-muted)' }}>{c.email}</div>
+                  {c.company && <div className="text-xs" style={{ color: 'var(--th-muted)' }}>{c.company}</div>}
+                </td>
+                <td className="px-5 py-4">
+                  <span
+                    className="px-2.5 py-1 rounded-full text-xs font-medium"
+                    style={{
+                      background: c.type === 'monthly' ? 'var(--th-primary-light)' : 'var(--th-accent-light)',
+                      color: c.type === 'monthly' ? 'var(--color-primary)' : 'var(--color-accent)',
+                      border: `1px solid ${c.type === 'monthly' ? 'var(--th-primary-glow)' : 'rgba(56,189,248,0.2)'}`,
+                    }}
+                  >
+                    {c.type === 'monthly' ? '📅 Monthly' : '💼 One-Time'}
+                  </span>
+                </td>
+                <td className="px-5 py-4 font-semibold" style={{ color: 'var(--th-text)' }}>
+                  {c.type === 'monthly'
+                    ? `₹${(c.monthly_rate || 0).toLocaleString()}/mo`
+                    : `₹${(c.project_value || 0).toLocaleString()}`}
+                </td>
+                <td className="px-5 py-4 text-xs" style={{ color: 'var(--th-muted)' }}>
+                  {c.type === 'monthly'
+                    ? c.billing_cycle_start ? `Cycle: ${format(new Date(c.billing_cycle_start), 'MMM d')}` : '—'
+                    : c.project_deadline ? format(new Date(c.project_deadline), 'MMM d, yyyy') : '—'}
+                </td>
+                <td className="px-5 py-4">
+                  <StatusBadge status={c.payment_status} />
+                </td>
+                <td className="px-5 py-4">
+                  <div className="flex items-center gap-1">
+                    {c.type === 'monthly' && c.payment_status !== 'paid' && (
+                      <button
+                        onClick={() => onMarkPaid(c)}
+                        title="Mark as Paid"
+                        className="p-2 rounded-lg transition-all duration-200 cursor-pointer"
+                        style={{ background: 'transparent', color: 'var(--color-success)' }}
+                        onMouseEnter={e => e.currentTarget.style.background = 'var(--th-success-bg)'}
+                        onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                      </button>
+                    )}
+                    <button
+                      onClick={() => onEdit(c)}
+                      title="Edit"
+                      className="p-2 rounded-lg transition-all duration-200 cursor-pointer"
+                      style={{ background: 'transparent', color: 'var(--color-primary)' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--th-primary-light)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <Pencil className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => handleDelete(c)}
+                      title="Delete"
+                      className="p-2 rounded-lg transition-all duration-200 cursor-pointer"
+                      style={{ background: 'transparent', color: 'var(--color-danger)' }}
+                      onMouseEnter={e => e.currentTarget.style.background = 'var(--th-danger-bg)'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

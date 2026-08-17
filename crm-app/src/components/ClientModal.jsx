@@ -15,6 +15,8 @@ const empty = {
   payment_status: 'pending'
 }
 
+const inp = "glass-input w-full px-3 py-2.5 rounded-xl text-sm"
+
 export default function ClientModal({ client, onClose, onSave }) {
   const [form, setForm]       = useState(empty)
   const [loading, setLoading] = useState(false)
@@ -38,28 +40,38 @@ export default function ClientModal({ client, onClose, onSave }) {
 
   return (
     <div
-      className="fixed inset-0 z-50 bg-black/50 flex items-end sm:items-center justify-center p-0 sm:p-4"
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 animate-fade-in"
+      style={{ background: 'var(--th-modal-backdrop)', backdropFilter: 'blur(8px)' }}
       onClick={onClose}
     >
       <div
-        className="bg-white rounded-t-3xl sm:rounded-2xl shadow-2xl w-full sm:max-w-lg max-h-[92vh] overflow-y-auto"
+        className="rounded-t-3xl sm:rounded-2xl shadow-2xl w-full sm:max-w-lg max-h-[92vh] overflow-y-auto animate-slide-up"
+        style={{
+          background: 'var(--th-modal-bg)',
+          border: '1px solid var(--th-border)',
+          backdropFilter: 'blur(24px)',
+        }}
         onClick={e => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="sticky top-0 bg-white z-10 flex items-center justify-between px-6 py-4 border-b border-slate-200 rounded-t-3xl sm:rounded-t-2xl">
+        <div
+          className="sticky top-0 z-10 flex items-center justify-between px-6 py-4 rounded-t-3xl sm:rounded-t-2xl"
+          style={{ background: 'var(--th-modal-bg)', borderBottom: '1px solid var(--th-border)' }}
+        >
           <div>
-            <h2 className="text-lg font-bold text-slate-800">
+            <h2 className="text-lg font-bold font-[--font-display]" style={{ color: 'var(--th-text)' }}>
               {client?.id ? 'Edit Client' : '+ Add New Client'}
             </h2>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs mt-0.5" style={{ color: 'var(--th-muted)' }}>
               {client?.id ? 'Update client information' : 'Fill in the client details below'}
             </p>
           </div>
           <button
             onClick={onClose}
-            className="p-2 rounded-xl hover:bg-slate-100 transition-colors"
+            className="p-2 rounded-xl transition-colors cursor-pointer"
+            style={{ background: 'var(--th-surface)', color: 'var(--th-muted)' }}
           >
-            <X className="w-5 h-5 text-slate-400" />
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -117,36 +129,38 @@ export default function ClientModal({ client, onClose, onSave }) {
               <button
                 type="button"
                 onClick={() => set('type', 'monthly')}
-                className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all ${
-                  form.type === 'monthly'
-                    ? 'border-indigo-500 bg-indigo-50'
-                    : 'border-slate-200 hover:border-indigo-200'
-                }`}
+                className="flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 cursor-pointer"
+                style={{
+                  background: form.type === 'monthly' ? 'var(--th-primary-light)' : 'var(--th-surface)',
+                  border: `2px solid ${form.type === 'monthly' ? 'var(--color-primary)' : 'var(--th-border)'}`,
+                  boxShadow: form.type === 'monthly' ? '0 0 20px var(--th-primary-glow)' : 'none',
+                }}
               >
                 <span className="text-2xl">📅</span>
                 <div className="text-center">
-                  <div className={`font-semibold text-sm ${form.type === 'monthly' ? 'text-indigo-600' : 'text-slate-700'}`}>
+                  <div className="font-semibold text-sm" style={{ color: form.type === 'monthly' ? 'var(--color-primary)' : 'var(--th-text)' }}>
                     Monthly
                   </div>
-                  <div className="text-xs text-slate-400">Recurring billing</div>
+                  <div className="text-xs" style={{ color: 'var(--th-muted)' }}>Recurring billing</div>
                 </div>
               </button>
 
               <button
                 type="button"
                 onClick={() => set('type', 'onetime')}
-                className={`flex flex-col items-center gap-2 p-4 rounded-2xl border-2 transition-all ${
-                  form.type === 'onetime'
-                    ? 'border-violet-500 bg-violet-50'
-                    : 'border-slate-200 hover:border-violet-200'
-                }`}
+                className="flex flex-col items-center gap-2 p-4 rounded-2xl transition-all duration-300 cursor-pointer"
+                style={{
+                  background: form.type === 'onetime' ? 'var(--th-accent-light)' : 'var(--th-surface)',
+                  border: `2px solid ${form.type === 'onetime' ? 'var(--color-accent)' : 'var(--th-border)'}`,
+                  boxShadow: form.type === 'onetime' ? '0 0 20px rgba(56,189,248,0.2)' : 'none',
+                }}
               >
                 <span className="text-2xl">💼</span>
                 <div className="text-center">
-                  <div className={`font-semibold text-sm ${form.type === 'onetime' ? 'text-violet-600' : 'text-slate-700'}`}>
+                  <div className="font-semibold text-sm" style={{ color: form.type === 'onetime' ? 'var(--color-accent)' : 'var(--th-text)' }}>
                     One-Time
                   </div>
-                  <div className="text-xs text-slate-400">Fixed project</div>
+                  <div className="text-xs" style={{ color: 'var(--th-muted)' }}>Fixed project</div>
                 </div>
               </button>
             </div>
@@ -204,19 +218,21 @@ export default function ClientModal({ client, onClose, onSave }) {
             <Field label="Payment Status">
               <div className="grid grid-cols-3 gap-2">
                 {[
-                  { value: 'pending', label: 'Pending', emoji: '⏳', active: 'border-amber-500 bg-amber-50 text-amber-600' },
-                  { value: 'paid',    label: 'Paid',    emoji: '✅', active: 'border-emerald-500 bg-emerald-50 text-emerald-600' },
-                  { value: 'overdue', label: 'Overdue', emoji: '🔴', active: 'border-rose-500 bg-rose-50 text-rose-600' },
+                  { value: 'pending', label: 'Pending', emoji: '⏳', color: 'var(--color-warning)', bg: 'var(--th-warning-bg)', border: 'rgba(245,158,11,0.3)' },
+                  { value: 'paid',    label: 'Paid',    emoji: '✅', color: 'var(--color-success)', bg: 'var(--th-success-bg)', border: 'rgba(34,197,94,0.3)' },
+                  { value: 'overdue', label: 'Overdue', emoji: '🔴', color: 'var(--color-danger)', bg: 'var(--th-danger-bg)', border: 'rgba(239,68,68,0.3)' },
                 ].map(s => (
                   <button
                     key={s.value}
                     type="button"
                     onClick={() => set('payment_status', s.value)}
-                    className={`py-2.5 px-2 rounded-xl border-2 text-xs font-semibold transition-all ${
-                      form.payment_status === s.value
-                        ? s.active
-                        : 'border-slate-200 text-slate-400 hover:border-slate-300'
-                    }`}
+                    className="py-2.5 px-2 rounded-xl text-xs font-semibold transition-all duration-200 cursor-pointer"
+                    style={{
+                      background: form.payment_status === s.value ? s.bg : 'var(--th-surface)',
+                      border: `2px solid ${form.payment_status === s.value ? s.border : 'var(--th-border)'}`,
+                      color: form.payment_status === s.value ? s.color : 'var(--th-muted)',
+                      boxShadow: form.payment_status === s.value ? `0 0 12px ${s.bg}` : 'none',
+                    }}
                   >
                     {s.emoji} {s.label}
                   </button>
@@ -236,14 +252,17 @@ export default function ClientModal({ client, onClose, onSave }) {
               className={inp + ' resize-none'}
               placeholder="Add project links, client requirements, special instructions, deadlines…"
             />
-            <p className="text-xs text-slate-400">
+            <p className="text-xs" style={{ color: 'var(--th-muted)' }}>
               📌 This is visible to staff as their task reference.
             </p>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="text-rose-500 text-sm bg-rose-50 px-4 py-3 rounded-xl border border-rose-200">
+            <div
+              className="text-sm px-4 py-3 rounded-xl animate-fade-in"
+              style={{ background: 'var(--th-danger-bg)', border: '1px solid rgba(239,68,68,0.2)', color: 'var(--color-danger)' }}
+            >
               ⚠️ {error}
             </div>
           )}
@@ -253,15 +272,15 @@ export default function ClientModal({ client, onClose, onSave }) {
             <button
               type="button"
               onClick={onClose}
-              className="py-3 rounded-xl border-2 border-slate-200 text-sm font-semibold text-slate-500 hover:bg-slate-50 transition-colors"
+              className="py-3 rounded-xl text-sm font-semibold transition-all duration-200 cursor-pointer"
+              style={{ background: 'var(--th-surface)', border: '2px solid var(--th-border)', color: 'var(--th-muted)' }}
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={loading}
-              style={{ backgroundColor: loading ? '#a5b4fc' : '#4f46e5' }}
-              className="py-3 rounded-xl text-white text-sm font-semibold shadow-sm transition-all"
+              className="btn-gradient py-3 rounded-xl text-sm cursor-pointer"
             >
               {loading ? 'Saving…' : client?.id ? '💾 Save Changes' : '✓ Add Client'}
             </button>
@@ -275,15 +294,13 @@ export default function ClientModal({ client, onClose, onSave }) {
 
 // ── Helpers ──
 
-const inp = "w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-400 bg-white"
-
 function SectionTitle({ icon: Icon, title }) {
   return (
     <div className="flex items-center gap-2">
-      <div className="p-1.5 rounded-lg bg-indigo-50">
-        <Icon className="w-3.5 h-3.5 text-indigo-500" />
+      <div className="p-1.5 rounded-lg" style={{ background: 'var(--th-primary-light)' }}>
+        <Icon className="w-3.5 h-3.5 text-[--color-primary]" />
       </div>
-      <h3 className="font-semibold text-sm text-slate-700">{title}</h3>
+      <h3 className="font-semibold text-sm" style={{ color: 'var(--th-text)' }}>{title}</h3>
     </div>
   )
 }
@@ -291,8 +308,8 @@ function SectionTitle({ icon: Icon, title }) {
 function Field({ label, children, required }) {
   return (
     <div>
-      <label className="text-xs font-medium text-slate-400 block mb-1.5 uppercase tracking-wide">
-        {label}{required && <span className="text-rose-400 ml-1">*</span>}
+      <label className="text-xs font-medium block mb-1.5 uppercase tracking-wider" style={{ color: 'var(--th-muted)' }}>
+        {label}{required && <span className="text-[--color-danger] ml-1">*</span>}
       </label>
       {children}
     </div>

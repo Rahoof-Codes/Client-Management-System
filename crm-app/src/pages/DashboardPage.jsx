@@ -10,7 +10,8 @@ import { Search } from 'lucide-react'
 
 export default function DashboardPage({ user, profile }) {
   const isAdmin = profile?.role === 'admin'
-  const { clients, loading, addClient, updateClient, deleteClient, markPaid } = useClients(user.id, isAdmin)
+  const userId = user?.uid || user?.id
+  const { clients, loading, addClient, updateClient, deleteClient, markPaid } = useClients(userId, isAdmin)
 
   const [search, setSearch] = useState('')
   const [filter, setFilter] = useState('all')
@@ -54,22 +55,27 @@ export default function DashboardPage({ user, profile }) {
     return addClient(form)
   }
 
+  // Get greeting based on time
+  const hour = new Date().getHours()
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening'
+
   return (
-    <div className="flex min-h-screen bg-[--color-bg]">
+    <div className="flex min-h-screen"
+      style={{ background: 'var(--th-bg)' }}>
       <Sidebar user={user} profile={profile} />
 
       <main className="flex-1 p-8 overflow-auto">
         <div className="max-w-7xl mx-auto">
 
           {/* Page Header */}
-          <div className="mb-6">
-            <h1 className="text-2xl font-bold font-[--font-display]">
+          <div className="mb-6 animate-fade-in">
+            <h1 className="text-2xl font-bold font-[--font-display] text-gradient">
               {isAdmin ? 'Client Dashboard' : 'Client List'}
             </h1>
-            <p className="text-[--color-muted] text-sm mt-0.5">
-              {clients.length} clients ·{' '}
+            <p className="text-sm mt-1" style={{ color: 'var(--th-text-secondary)' }}>
+              {greeting} — {clients.length} clients ·{' '}
               {new Date().toLocaleDateString('en-IN', { dateStyle: 'long' })}
-              {!isAdmin && <span className="ml-2 text-indigo-400 font-medium">· Staff View</span>}
+              {!isAdmin && <span className="ml-2 text-[--color-accent] font-medium">· Staff View</span>}
             </p>
           </div>
 
@@ -89,19 +95,23 @@ export default function DashboardPage({ user, profile }) {
 
           {/* Staff: simple search only */}
           {!isAdmin && (
-            <div className="relative mb-4 max-w-sm">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[--color-muted]" />
+            <div className="relative mb-4 max-w-sm animate-fade-in" style={{ animationDelay: '0.1s' }}>
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4" style={{ color: 'var(--th-muted)' }} />
               <input
                 value={search} onChange={e => setSearch(e.target.value)}
                 placeholder="Search clients…"
-                className="pl-9 pr-4 py-2 rounded-xl border border-[--color-border] text-sm w-full focus:outline-none focus:ring-2 focus:ring-[--color-primary] bg-white"
+                className="glass-input w-full pl-9 pr-4 py-2.5 rounded-xl text-sm"
               />
             </div>
           )}
 
           {/* Table */}
           {loading ? (
-            <div className="text-center py-20 text-[--color-muted]">Loading…</div>
+            <div className="glass-card rounded-2xl py-20 text-center animate-fade-in">
+              <div className="inline-block w-8 h-8 rounded-full mb-3"
+                style={{ border: '2px solid var(--th-border)', borderTopColor: 'var(--color-primary)', animation: 'spin 0.8s linear infinite' }} />
+              <p className="text-sm" style={{ color: 'var(--th-muted)' }}>Loading clients…</p>
+            </div>
           ) : isAdmin ? (
             <ClientTable
               clients={filtered}
