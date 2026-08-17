@@ -6,9 +6,11 @@ import FilterBar from '../components/FilterBar'
 import ClientTable from '../components/ClientTable'
 import ClientModal from '../components/ClientModal'
 import StaffClientTable from '../components/StaffClientTable'
-import { Search } from 'lucide-react'
+import { Search, Sun, Moon } from 'lucide-react'
+import { useTheme } from '../context/ThemeContext'
 
 export default function DashboardPage({ user, profile }) {
+  const { theme, toggleTheme } = useTheme()
   const isAdmin = profile?.role === 'admin'
   const userId = user?.uid || user?.id
   const { clients, loading, addClient, updateClient, deleteClient, markPaid } = useClients(userId, isAdmin)
@@ -67,16 +69,37 @@ export default function DashboardPage({ user, profile }) {
       <main className="flex-1 p-8 overflow-auto">
         <div className="max-w-7xl mx-auto">
 
-          {/* Page Header */}
-          <div className="mb-6 animate-fade-in">
-            <h1 className="text-2xl font-bold font-[--font-display] text-gradient">
-              {isAdmin ? 'Client Dashboard' : 'Client List'}
-            </h1>
-            <p className="text-sm mt-1" style={{ color: 'var(--th-text-secondary)' }}>
-              {greeting} — {clients.length} clients ·{' '}
-              {new Date().toLocaleDateString('en-IN', { dateStyle: 'long' })}
-              {!isAdmin && <span className="ml-2 text-[--color-accent] font-medium">· Staff View</span>}
-            </p>
+          {/* Page Header with Top Theme Toggle */}
+          <div className="flex items-start justify-between mb-6 animate-fade-in">
+            <div>
+              <h1 className="text-2xl font-bold font-[--font-display] text-gradient">
+                {isAdmin ? 'Client Dashboard' : 'Client List'}
+              </h1>
+              <p className="text-sm mt-1" style={{ color: 'var(--th-text-secondary)' }}>
+                {greeting} — {clients.length} clients ·{' '}
+                {new Date().toLocaleDateString('en-IN', { dateStyle: 'long' })}
+                {!isAdmin && <span className="ml-2 text-[--color-accent] font-medium">· Staff View</span>}
+              </p>
+            </div>
+
+            {/* Top-Right Theme Toggle */}
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="flex items-center gap-2 px-3.5 py-2 rounded-full glass glass-hover cursor-pointer transition-all duration-300 shadow-sm"
+              style={{ border: '1px solid var(--th-border)', background: 'var(--th-surface)' }}
+              title={`Switch to ${theme === 'light' ? 'Dark' : 'Bright'} mode`}
+            >
+              <span className="text-xs font-semibold" style={{ color: 'var(--th-text)' }}>
+                {theme === 'light' ? 'Bright' : 'Dark'}
+              </span>
+              <div className="w-6 h-6 rounded-full flex items-center justify-center"
+                style={{ background: theme === 'light' ? 'rgba(245,158,11,0.15)' : 'rgba(124,92,252,0.2)' }}>
+                {theme === 'light'
+                  ? <Sun className="w-3.5 h-3.5 text-amber-500" />
+                  : <Moon className="w-3.5 h-3.5 text-indigo-400" />}
+              </div>
+            </button>
           </div>
 
           {/* Admin-only: Stats + full controls */}

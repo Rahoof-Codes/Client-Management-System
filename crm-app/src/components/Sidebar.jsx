@@ -17,7 +17,7 @@ export default function Sidebar({ user, profile }) {
     <aside className="w-[260px] shrink-0 flex flex-col min-h-screen glass animate-slide-in-right"
       style={{ borderRight: '1px solid var(--th-border)', background: 'var(--th-sidebar-bg)' }}>
 
-      {/* ── Logo & User ── */}
+      {/* ── Logo & Top Theme Switcher ── */}
       <div className="p-6" style={{ borderBottom: '1px solid var(--th-border)' }}>
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
@@ -28,7 +28,7 @@ export default function Sidebar({ user, profile }) {
             <span className="font-bold text-lg font-[--font-display] text-gradient">ClientOS</span>
           </div>
 
-          {/* Theme Toggle in Header */}
+          {/* Theme Toggle at top */}
           <button
             onClick={toggleTheme}
             className="theme-toggle"
@@ -81,20 +81,8 @@ export default function Sidebar({ user, profile }) {
         </a>
       </nav>
 
-      {/* ── Footer / Theme Mode Info + Sign Out ── */}
-      <div className="p-3 space-y-2" style={{ borderTop: '1px solid var(--th-border)' }}>
-        <button
-          onClick={toggleTheme}
-          className="flex items-center justify-between w-full px-3 py-2 rounded-xl text-xs transition-colors cursor-pointer"
-          style={{ background: 'var(--th-surface)', color: 'var(--th-muted)', border: '1px solid var(--th-border)' }}
-        >
-          <span className="flex items-center gap-2">
-            {theme === 'light' ? <Sun className="w-3.5 h-3.5 text-amber-500" /> : <Moon className="w-3.5 h-3.5 text-indigo-400" />}
-            <span>Mode: <strong style={{ color: 'var(--th-text)' }}>{theme === 'light' ? 'Bright / Light' : 'Dark'}</strong></span>
-          </span>
-          <span className="text-[10px] font-medium text-[--color-primary]">Switch</span>
-        </button>
-
+      {/* ── Sign Out at Bottom ── */}
+      <div className="p-3" style={{ borderTop: '1px solid var(--th-border)' }}>
         <button
           onClick={() => signOut(auth)}
           className="flex items-center gap-3 w-full px-3 py-2.5 rounded-xl text-sm transition-all duration-200 hover:text-[--color-danger] cursor-pointer"
